@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>4Bank</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    
+<div class="logo">
+    <img src="img/logo-4bank.png" alt="4Bank Logo">
+    <span class="logo-text">4Bank</span>
+</div>
+
+    
+    <button onclick="loadPage('dashboard')">
+      <span class="material-symbols-outlined menu-icon">
+team_dashboard
+</span>
+      Dashboard</button>
+    <button onclick="loadPage('pix')">
+      
+<span class="material-symbols-outlined menu-icon" id="pix">
+window
+</span>
+  Pix
+
+    </button>
+    <button onclick="loadPage('invest')">
+      <span class="material-symbols-outlined menu-icon">
+        monitoring
+      </span>
+        Investimentos
+    </button>
+    <button onclick="loadPage('cartao')">      
+      <span class="material-symbols-outlined menu-icon">
+          credit_card
+        </span>
+        Cartão
+    </button>
+    <button onclick="loadPage('extrato')">
+      
+      <span class="material-symbols-outlined menu-icon">
+receipt
+</span>
+      Extrato</button>
+  </aside>
+
+  <!-- Conteúdo -->
+  <main>
+    <header>
+      <div class="user">Alexandre</div>
+    </header>
+
+    <section id="content"></section>
+  </main>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

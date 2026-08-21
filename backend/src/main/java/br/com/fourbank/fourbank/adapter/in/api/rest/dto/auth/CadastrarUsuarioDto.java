@@ -1,11 +1,10 @@
 package br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth;
 
-import br.com.fourbank.fourbank.application.command.user.CadastrarUsuarioCommand;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CadastroRequest(
+public record CadastrarUsuarioDto(
         @NotBlank(message = "O nome é obrigatório")
         @Size(max = 120, message = "O nome deve ter no máximo 120 caracteres")
         String nome,
@@ -19,7 +18,4 @@ public record CadastroRequest(
         @Size(min = 8, max = 72, message = "A senha deve ter entre 8 e 72 caracteres")
         String senha
 ) {
-    public CadastrarUsuarioCommand toCommand() {
-        return new CadastrarUsuarioCommand(nome, email, senha);
-    }
 }

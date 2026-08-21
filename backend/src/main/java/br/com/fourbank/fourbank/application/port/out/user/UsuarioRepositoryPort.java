@@ -1,6 +1,6 @@
 package br.com.fourbank.fourbank.application.port.out.user;
 
-import br.com.fourbank.fourbank.domain.model.Usuario;
+import br.com.fourbank.fourbank.application.model.Usuario;
 
 import java.util.Optional;
 

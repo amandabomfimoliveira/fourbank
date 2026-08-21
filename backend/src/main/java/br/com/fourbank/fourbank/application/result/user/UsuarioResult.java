@@ -1,6 +1,6 @@
 package br.com.fourbank.fourbank.application.result.user;
 
-import br.com.fourbank.fourbank.domain.model.Usuario;
+import br.com.fourbank.fourbank.application.model.Usuario;
 
 public record UsuarioResult(Long id, String nome, String email, String perfil) {
 

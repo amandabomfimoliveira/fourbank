@@ -1,7 +1,7 @@
 package br.com.fourbank.fourbank.adapter.out.security;
 
 import br.com.fourbank.fourbank.application.port.out.auth.AutenticadorPort;
-import br.com.fourbank.fourbank.domain.model.Usuario;
+import br.com.fourbank.fourbank.application.model.Usuario;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;

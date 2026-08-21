@@ -1,4 +1,4 @@
-package br.com.fourbank.fourbank.domain.model;
+package br.com.fourbank.fourbank.application.model;
 
 import java.time.Instant;
 import java.util.Objects;

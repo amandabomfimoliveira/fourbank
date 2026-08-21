@@ -1,7 +1,7 @@
 package br.com.fourbank.fourbank.adapter.out.security;
 
 import br.com.fourbank.fourbank.application.port.out.auth.TokenProviderPort;
-import br.com.fourbank.fourbank.domain.model.Usuario;
+import br.com.fourbank.fourbank.application.model.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;

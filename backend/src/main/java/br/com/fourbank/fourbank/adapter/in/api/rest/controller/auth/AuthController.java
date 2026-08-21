@@ -1,9 +1,11 @@
 package br.com.fourbank.fourbank.adapter.in.api.rest.controller.auth;
 
-import br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth.AuthResponse;
-import br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth.CadastroRequest;
-import br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth.LoginRequest;
-import br.com.fourbank.fourbank.application.port.in.auth.AutenticacaoUseCase;
+import br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth.AutenticacaoDto;
+import br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth.CadastrarUsuarioDto;
+import br.com.fourbank.fourbank.adapter.in.api.rest.dto.auth.LoginDto;
+import br.com.fourbank.fourbank.adapter.in.api.rest.mapper.auth.AutenticacaoMapper;
+import br.com.fourbank.fourbank.application.port.in.auth.CadastrarUsuarioUseCase;
+import br.com.fourbank.fourbank.application.port.in.auth.LoginUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,20 +18,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AutenticacaoUseCase autenticacaoUseCase;
+    private final CadastrarUsuarioUseCase cadastrarUsuarioUseCase;
+    private final LoginUseCase loginUseCase;
 
-    public AuthController(AutenticacaoUseCase autenticacaoUseCase) {
-        this.autenticacaoUseCase = autenticacaoUseCase;
+    public AuthController(
+            CadastrarUsuarioUseCase cadastrarUsuarioUseCase,
+            LoginUseCase loginUseCase
+    ) {
+        this.cadastrarUsuarioUseCase = cadastrarUsuarioUseCase;
+        this.loginUseCase = loginUseCase;
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthResponse cadastrar(@Valid @RequestBody CadastroRequest request) {
-        return AuthResponse.from(autenticacaoUseCase.cadastrar(request.toCommand()));
+    public AutenticacaoDto cadastrar(@Valid @RequestBody CadastrarUsuarioDto dto) {
+        var command = AutenticacaoMapper.toCommand(dto);
+        var result = cadastrarUsuarioUseCase.cadastrar(command);
+        return AutenticacaoMapper.toDto(result);
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@Valid @RequestBody LoginRequest request) {
-        return AuthResponse.from(autenticacaoUseCase.login(request.toCommand()));
+    public AutenticacaoDto login(@Valid @RequestBody LoginDto dto) {
+        var command = AutenticacaoMapper.toCommand(dto);
+        var result = loginUseCase.login(command);
+        return AutenticacaoMapper.toDto(result);
     }
 }

@@ -27,8 +27,11 @@ class FourbankApplicationTests {
 		String cadastroJson = """
 				{
 				  "nome": "Amanda",
+				  "documento": "12345678901",
+				  "tipoPessoa": "FISICA",
 				  "email": "amanda@example.com",
-				  "senha": "senha-segura-123"
+				  "senha": "senha-segura-123",
+				  "tipoConta": "CORRENTE"
 				}
 				""";
 
@@ -48,6 +51,8 @@ class FourbankApplicationTests {
 					.header("Authorization", "Bearer " + token))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.nome").value("Amanda"))
+				.andExpect(jsonPath("$.documento").value("12345678901"))
+				.andExpect(jsonPath("$.tipoPessoa").value("FISICA"))
 				.andExpect(jsonPath("$.email").value("amanda@example.com"))
 				.andExpect(jsonPath("$.perfil").value("USER"));
 

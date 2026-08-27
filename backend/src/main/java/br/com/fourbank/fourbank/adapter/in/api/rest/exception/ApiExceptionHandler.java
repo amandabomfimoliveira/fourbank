@@ -1,7 +1,6 @@
 package br.com.fourbank.fourbank.adapter.in.api.rest.exception;
 
-import br.com.fourbank.fourbank.application.exception.EmailJaCadastradoException;
-import br.com.fourbank.fourbank.application.exception.UsuarioNaoEncontradoException;
+import br.com.fourbank.fourbank.application.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -29,20 +28,33 @@ public class ApiExceptionHandler {
         return resposta(HttpStatus.BAD_REQUEST, "Os dados enviados são inválidos", request, campos);
     }
 
-    @ExceptionHandler({EmailJaCadastradoException.class, DataIntegrityViolationException.class})
+    @ExceptionHandler({
+            EmailJaCadastradoException.class,
+            DocumentoJaCadastradoException.class,
+            DataIntegrityViolationException.class
+    })
     ResponseEntity<ApiError> handleConflict(Exception exception, HttpServletRequest request) {
         String mensagem = exception instanceof EmailJaCadastradoException
+                || exception instanceof DocumentoJaCadastradoException
                 ? exception.getMessage()
                 : "Já existe um registro com esses dados";
         return resposta(HttpStatus.CONFLICT, mensagem, request, Map.of());
     }
 
-    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    @ExceptionHandler({
+        UsuarioNaoEncontradoException.class,
+        ContaNaoEncontradaException.class
+    })
     ResponseEntity<ApiError> handleNotFound(
-            UsuarioNaoEncontradoException exception,
-            HttpServletRequest request
+        RuntimeException exception,
+        HttpServletRequest request
     ) {
-        return resposta(HttpStatus.NOT_FOUND, exception.getMessage(), request, Map.of());
+        return resposta(
+            HttpStatus.NOT_FOUND,
+            exception.getMessage(),
+            request,
+            Map.of()
+        );
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -51,6 +63,25 @@ public class ApiExceptionHandler {
             HttpServletRequest request
     ) {
         return resposta(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos", request, Map.of());
+    }
+
+    @ExceptionHandler({
+        ContaBloqueadaException.class,
+        ContaEncerradaException.class,
+        ContaNaoBloqueadaException.class,
+        SaldoNaoZeradoException.class,
+        UsuarioJaPossuiContaDoTipoException.class
+    })
+    ResponseEntity<ApiError> handleContaConflict(
+        RuntimeException exception,
+        HttpServletRequest request
+    ) {
+        return resposta(
+            HttpStatus.CONFLICT,
+            exception.getMessage(),
+            request,
+            Map.of()
+        );
     }
 
     private ResponseEntity<ApiError> resposta(

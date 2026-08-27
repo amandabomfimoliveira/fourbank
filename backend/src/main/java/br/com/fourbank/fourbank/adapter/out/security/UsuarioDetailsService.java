@@ -1,6 +1,6 @@
 package br.com.fourbank.fourbank.adapter.out.security;
 
-import br.com.fourbank.fourbank.application.port.out.user.UsuarioRepositoryPort;
+import br.com.fourbank.fourbank.application.port.out.usuario.UsuarioRepositoryPort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

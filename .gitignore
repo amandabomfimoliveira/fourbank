@@ -16,7 +16,8 @@ desktop.ini
 *.iml
 *.iws
 *.ipr
-out/
+/out/
+/backend/out/
 
 # VS Code
 .vscode/

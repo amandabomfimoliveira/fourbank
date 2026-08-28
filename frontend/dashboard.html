@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>4Bank</title>
+<link rel="stylesheet" href="css/dashboard.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    
+<div class="logo">
+    <img src="img/logo-4bank.png" alt="4Bank Logo">
+    <span class="logo-text">4Bank</span>
+</div>
+
+    
+    <button onclick="loadPage('dashboard')">
+      <span class="material-symbols-outlined menu-icon">
+team_dashboard
+</span>
+      Dashboard</button>
+    <button onclick="loadPage('pix')">
+      
+<span class="material-symbols-outlined menu-icon" id="pix">
+window
+</span>
+  Pix
+
+    </button>
+    <button onclick="loadPage('invest')">
+      <span class="material-symbols-outlined menu-icon">
+        monitoring
+      </span>
+        Investimentos
+    </button>
+    <button onclick="loadPage('cartao')">      
+      <span class="material-symbols-outlined menu-icon">
+          credit_card
+        </span>
+        Cartão
+    </button>
+    <button onclick="loadPage('extrato')">
+      
+      <span class="material-symbols-outlined menu-icon">
+receipt
+</span>
+      Extrato</button>
+  </aside>
+
+  <!-- Conteúdo -->
+  <main>
+    <header>
+      <div class="user" id="dashboard-user">Carregando...</div>
+    </header>
+
+    <section id="content"></section>
+  </main>
+
+</div>
+
+<div class="backend-modal-backdrop" id="new-account-modal" hidden>
+  <div class="backend-modal" role="dialog" aria-modal="true" aria-labelledby="new-account-title">
+    <button class="backend-modal-close" id="close-account-modal" type="button" aria-label="Fechar">&times;</button>
+    <h2 id="new-account-title">Abrir nova conta</h2>
+    <p>Escolha um tipo de conta que você ainda não possui.</p>
+
+    <form id="new-account-form">
+      <label for="new-account-type">Tipo da conta</label>
+      <select id="new-account-type" name="tipo" required></select>
+      <p class="backend-modal-message" id="new-account-message" role="alert" hidden></p>
+
+      <div class="backend-modal-actions">
+        <button class="btn-outline" id="cancel-account-modal" type="button">Cancelar</button>
+        <button class="btn" type="submit">Abrir conta</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="backend-modal-backdrop" id="end-account-modal" hidden>
+  <div class="backend-modal" role="dialog" aria-modal="true" aria-labelledby="end-account-title">
+    <button class="backend-modal-close" id="dismiss-end-account-modal" type="button" aria-label="Fechar">&times;</button>
+    <div class="backend-modal-warning" aria-hidden="true">!</div>
+    <h2 id="end-account-title">Encerrar conta</h2>
+    <p id="end-account-description"></p>
+    <p class="backend-modal-warning-text">A conta precisa estar com saldo zerado. Esta ação não poderá ser desfeita.</p>
+
+    <div class="backend-modal-actions">
+      <button class="btn-outline" id="cancel-end-account-modal" type="button">Cancelar</button>
+      <button class="backend-danger-button" id="confirm-end-account" type="button">Encerrar conta</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="js/dashboard-api.js"></script>
+</body>
+</html>

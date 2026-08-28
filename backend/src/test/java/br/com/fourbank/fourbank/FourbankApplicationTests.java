@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,6 +75,53 @@ class FourbankApplicationTests {
 	void deveRecusarRotaProtegidaSemToken() throws Exception {
 		mockMvc.perform(get("/api/users/me"))
 				.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	void devePermitirNovaContaDoMesmoTipoAposEncerramento() throws Exception {
+		String cadastroResponse = mockMvc.perform(post("/api/auth/register")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content("""
+							{
+							  "nome": "Cliente Reabertura",
+							  "documento": "98765432100",
+							  "tipoPessoa": "FISICA",
+							  "email": "reabertura@example.com",
+							  "senha": "senha-segura-123",
+							  "tipoConta": "CORRENTE"
+							}
+							"""))
+				.andExpect(status().isCreated())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+
+		String token = JsonPath.read(cadastroResponse, "$.token");
+		String tipoContaJson = """
+				{
+				  "tipo": "CORRENTE"
+				}
+				""";
+
+		mockMvc.perform(delete("/api/contas")
+					.header("Authorization", "Bearer " + token)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(tipoContaJson))
+				.andExpect(status().isNoContent());
+
+		mockMvc.perform(post("/api/contas")
+					.header("Authorization", "Bearer " + token)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(tipoContaJson))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.tipo").value("CORRENTE"))
+				.andExpect(jsonPath("$.status").value("ATIVA"));
+
+		mockMvc.perform(post("/api/contas")
+					.header("Authorization", "Bearer " + token)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(tipoContaJson))
+				.andExpect(status().isConflict());
 	}
 
 }

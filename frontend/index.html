@@ -1,69 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>4Bank</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="4Bank — seu banco, suas escolhas, seu futuro.">
+  <title>4Bank</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
 </head>
 <body>
+  <div id="app">
+    <section id="public-view" class="public-view">
+      <header class="site-header shell">
+        <a class="brand" href="#inicio" aria-label="4Bank — início"><img src="img/logo-4bank.png" alt="" width="57" height="40"><span>4Bank</span></a>
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span><span></span><span class="sr-only">Abrir menu</span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Navegação principal">
+          <a class="active" href="#inicio">Início</a><a href="#conta">Conta</a><a href="#cartao">Cartão</a><a href="#investimentos">Investimentos</a><a href="#seguranca">Segurança</a>
+        </nav>
+        <button class="button button-primary header-login" type="button" data-open-auth="login">Entrar</button>
+      </header>
 
-<div class="container">
+      <main>
+        <section class="hero" id="inicio">
+          <div class="shell hero-content">
+            <div class="hero-copy">
+              <p class="eyebrow">O banco feito para você</p>
+              <h1>Seu banco. Suas escolhas. Seu futuro.</h1>
+              <p class="hero-description">Tenha controle total da sua vida financeira em um só lugar. Faça Pix, acompanhe seus gastos, invista e gerencie sua conta com segurança, rapidez e simplicidade.</p>
+              <div class="hero-actions">
+                <button class="button button-primary button-large" type="button" data-open-auth="register">Abra sua conta <span aria-hidden="true">→</span></button>
+                <button class="button button-outline button-large" type="button" data-open-auth="login">Já sou cliente</button>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    
-<div class="logo">
-    <img src="img/logo-4bank.png" alt="4Bank Logo">
-    <span class="logo-text">4Bank</span>
-</div>
+        <section class="features shell" id="conta" aria-labelledby="features-title">
+          <div class="section-heading"><p class="eyebrow">Tudo em um só lugar</p><h2 id="features-title">Simplicidade em cada detalhe</h2></div>
+          <div class="feature-grid">
+            <article class="feature-card" id="seguranca"><span class="feature-icon" aria-hidden="true">ϟ</span><h3>Pix rápido e seguro</h3><p>Transferências instantâneas com a segurança que você precisa, 24 horas por dia.</p></article>
+            <article class="feature-card" id="cartao"><span class="feature-icon" aria-hidden="true">▭</span><h3>Conta sob seu controle</h3><p>Consulte seus dados, acompanhe o saldo e gerencie o status das suas contas.</p></article>
+            <article class="feature-card" id="investimentos"><span class="feature-icon" aria-hidden="true">⌁</span><h3>Investimentos simplificados</h3><p>Faça seu dinheiro render mais com opções claras e rentáveis direto no app.</p></article>
+            <article class="feature-card"><span class="feature-icon" aria-hidden="true">▥</span><h3>Acompanhamento de gastos</h3><p>Visualize suas finanças com informações organizadas e fáceis de entender.</p></article>
+          </div>
+        </section>
 
-    
-    <button onclick="loadPage('dashboard')">
-      <span class="material-symbols-outlined menu-icon">
-team_dashboard
-</span>
-      Dashboard</button>
-    <button onclick="loadPage('pix')">
-      
-<span class="material-symbols-outlined menu-icon" id="pix">
-window
-</span>
-  Pix
+        <section class="cta-section"><div class="shell cta-content"><h2>Uma conta completa para simplificar sua vida financeira.</h2><button class="button button-primary button-large" type="button" data-open-auth="register">Quero ser 4Bank</button></div></section>
+      </main>
 
-    </button>
-    <button onclick="loadPage('invest')">
-      <span class="material-symbols-outlined menu-icon">
-        monitoring
-      </span>
-        Investimentos
-    </button>
-    <button onclick="loadPage('cartao')">      
-      <span class="material-symbols-outlined menu-icon">
-          credit_card
-        </span>
-        Cartão
-    </button>
-    <button onclick="loadPage('extrato')">
-      
-      <span class="material-symbols-outlined menu-icon">
-receipt
-</span>
-      Extrato</button>
-  </aside>
+      <footer class="footer">
+        <div class="shell footer-content">
+          <div class="footer-brand"><a class="brand brand-small" href="#inicio"><img src="img/logo-4bank.png" alt="" width="42" height="30"><span>4Bank</span></a><p>© 2026 4Bank. Todos os direitos reservados.<br>Segurança e transparência em cada transação.</p></div>
+          <div class="footer-links"><h3>Empresa</h3><a href="#inicio">Institucional</a><a href="#inicio">Carreiras</a></div>
+          <div class="footer-links"><h3>Ajuda</h3><a href="#seguranca">Suporte ao cliente</a><a href="#seguranca">Segurança</a></div>
+          <div class="footer-links"><h3>Legal</h3><a href="#inicio">Privacidade</a><a href="#inicio">Termos de uso</a></div>
+        </div>
+      </footer>
+    </section>
 
-  <!-- Conteúdo -->
-  <main>
-    <header>
-      <div class="user">Alexandre</div>
-    </header>
+    <section id="dashboard-view" class="dashboard-view hidden" aria-label="Área do cliente">
+      <aside class="dashboard-sidebar">
+        <a class="brand" href="#" aria-label="4Bank"><img src="img/logo-4bank.png" alt="" width="50" height="35"><span>4Bank</span></a>
+        <nav class="dashboard-nav"><button class="dashboard-link active" type="button"><span aria-hidden="true">⌂</span> Visão geral</button><button class="dashboard-link" type="button" data-focus-accounts><span aria-hidden="true">▤</span> Minhas contas</button></nav>
+        <button class="dashboard-link logout-button" id="logout-button" type="button"><span aria-hidden="true">↪</span> Sair da conta</button>
+      </aside>
+      <main class="dashboard-main">
+        <header class="dashboard-header">
+          <button class="sidebar-toggle" id="sidebar-toggle" type="button" aria-label="Abrir menu">☰</button>
+          <div><p class="muted">Bem-vindo de volta,</p><h1 id="welcome-name">Cliente</h1></div>
+          <button class="profile-button" id="profile-button" type="button" aria-label="Dados do perfil"><span id="user-initials">4B</span><span id="profile-name">Cliente</span></button>
+        </header>
+        <section class="dashboard-content">
+          <div id="dashboard-message" class="alert hidden" role="alert"></div>
+          <div class="summary-grid">
+            <article class="balance-card"><div class="balance-top"><span>Saldo total</span><button id="toggle-balance" type="button" aria-label="Ocultar saldo">◉</button></div><strong id="total-balance" data-value="0">R$ 0,00</strong><small>Somado entre todas as contas</small><div class="balance-decoration" aria-hidden="true"></div></article>
+            <article class="summary-card"><span class="summary-icon">◎</span><div><small>Contas ativas</small><strong id="active-accounts">0</strong></div></article>
+            <article class="summary-card"><span class="summary-icon">♙</span><div><small>Perfil</small><strong id="user-role">Cliente</strong></div></article>
+          </div>
+          <section class="account-section" id="account-section">
+            <div class="account-section-heading"><div><p class="eyebrow">Seu patrimônio</p><h2>Minhas contas</h2></div><button class="button button-outline compact" id="new-account-button" type="button">+ Nova conta</button></div>
+            <div id="accounts-list" class="accounts-grid" aria-live="polite"></div>
+          </section>
+        </section>
+      </main>
+    </section>
+  </div>
 
-    <section id="content"></section>
-  </main>
+  <div class="modal-backdrop hidden" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="modal auth-modal-card">
+      <button class="modal-close" type="button" data-close-modal aria-label="Fechar">×</button>
+      <a class="brand modal-brand" href="#"><img src="img/logo-4bank.png" alt="" width="46" height="32"><span>4Bank</span></a>
+      <div class="auth-tabs" role="tablist"><button class="auth-tab active" id="login-tab" type="button" data-auth-tab="login">Entrar</button><button class="auth-tab" id="register-tab" type="button" data-auth-tab="register">Abrir conta</button></div>
+      <h2 id="auth-title">Acesse sua conta</h2><p class="modal-description" id="auth-description">Use seu e-mail e senha para continuar.</p><div id="auth-message" class="alert hidden" role="alert"></div>
+      <form id="login-form" class="auth-form">
+        <label>E-mail<input name="email" type="email" autocomplete="email" placeholder="voce@email.com" required></label>
+        <label>Senha<input name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" required></label>
+        <button class="button button-primary submit-button" type="submit">Entrar</button>
+      </form>
+      <form id="register-form" class="auth-form hidden">
+        <label>Nome completo<input name="nome" autocomplete="name" placeholder="Como podemos chamar você?" maxlength="120" required></label>
+        <div class="form-row"><label>Tipo de pessoa<select name="tipoPessoa"><option value="FISICA">Pessoa física</option><option value="JURIDICA">Pessoa jurídica</option></select></label><label>CPF ou CNPJ<input name="documento" inputmode="numeric" placeholder="Somente números" minlength="11" maxlength="14" required></label></div>
+        <label>E-mail<input name="email" type="email" autocomplete="email" placeholder="voce@email.com" required></label>
+        <label>Senha<input name="senha" type="password" autocomplete="new-password" placeholder="Mínimo de 8 caracteres" minlength="8" maxlength="72" required></label>
+        <label>Tipo da primeira conta<select name="tipoConta"><option value="CORRENTE">Conta corrente</option><option value="POUPANCA">Conta poupança</option></select></label>
+        <button class="button button-primary submit-button" type="submit">Criar minha conta</button>
+      </form>
+    </div>
+  </div>
 
-</div>
-
-<script src="app.js"></script>
+  <div class="modal-backdrop hidden" id="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title"><div class="modal small-modal"><button class="modal-close" type="button" data-close-modal aria-label="Fechar">×</button><p class="eyebrow">Dados cadastrais</p><h2 id="profile-title">Meu perfil</h2><dl id="profile-data" class="profile-data"></dl></div></div>
+  <div class="modal-backdrop hidden" id="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-modal-title"><div class="modal small-modal"><button class="modal-close" type="button" data-close-modal aria-label="Fechar">×</button><p class="eyebrow">Novo produto</p><h2 id="account-modal-title">Abrir outra conta</h2><p class="modal-description" id="account-modal-description">Escolha um tipo que você ainda não possui.</p><form id="account-form" class="auth-form"><label>Tipo da conta<select id="new-account-type" name="tipo" required></select></label><button class="button button-primary submit-button" type="submit">Abrir conta</button></form></div></div>
 </body>
 </html>

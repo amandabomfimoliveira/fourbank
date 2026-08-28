@@ -4,6 +4,7 @@ import br.com.fourbank.fourbank.adapter.out.persistence.data.conta.ContaData;
 import br.com.fourbank.fourbank.adapter.out.persistence.mapper.ContaPersistenceMapper;
 import br.com.fourbank.fourbank.adapter.out.persistence.repository.ContaJpaRepository;
 import br.com.fourbank.fourbank.application.model.conta.Conta;
+import br.com.fourbank.fourbank.application.model.conta.StatusConta;
 import br.com.fourbank.fourbank.application.model.conta.TipoConta;
 import br.com.fourbank.fourbank.application.port.out.conta.ContaRepositoryPort;
 import org.springframework.stereotype.Repository;
@@ -45,13 +46,15 @@ public class ContaPersistenceImpl implements ContaRepositoryPort {
     }
 
     @Override
-    public Optional<Conta> buscarPorUsuarioIdETipo(Long usuarioId, TipoConta tipo) {
-        return repository.findByUsuarioIdAndTipo(usuarioId,tipo).map(ContaPersistenceMapper::toModel);
+    public Optional<Conta> buscarNaoEncerradaPorUsuarioIdETipo(Long usuarioId, TipoConta tipo) {
+        return repository
+                .findFirstByUsuarioIdAndTipoAndStatusNot(usuarioId, tipo, StatusConta.ENCERRADA)
+                .map(ContaPersistenceMapper::toModel);
     }
 
     @Override
-    public boolean existePorUsuarioIdETipo(Long usuarioId, TipoConta tipo) {
-        return repository.existsByUsuarioIdAndTipo(usuarioId,tipo);
+    public boolean existeNaoEncerradaPorUsuarioIdETipo(Long usuarioId, TipoConta tipo) {
+        return repository.existsByUsuarioIdAndTipoAndStatusNot(usuarioId, tipo, StatusConta.ENCERRADA);
     }
 
     @Override

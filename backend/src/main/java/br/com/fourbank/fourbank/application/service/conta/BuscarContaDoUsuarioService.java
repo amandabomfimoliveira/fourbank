@@ -21,6 +21,8 @@ public class BuscarContaDoUsuarioService {
     public Conta buscar(String emailUsuario, TipoConta tipo){
         Usuario usuario = usuarioRepository.buscarPorEmail(emailUsuario).orElseThrow(ContaNaoEncontradaException::new);
 
-        return contaRepository.buscarPorUsuarioIdETipo(usuario.getId(), tipo).orElseThrow(ContaNaoEncontradaException::new);
+        return contaRepository
+                .buscarNaoEncerradaPorUsuarioIdETipo(usuario.getId(), tipo)
+                .orElseThrow(ContaNaoEncontradaException::new);
     }
 }

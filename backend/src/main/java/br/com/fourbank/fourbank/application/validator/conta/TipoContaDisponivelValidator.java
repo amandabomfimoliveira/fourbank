@@ -17,7 +17,7 @@ public final class TipoContaDisponivelValidator {
         Objects.requireNonNull(usuarioId, "O ID do usuário é obrigatório");
         Objects.requireNonNull(tipo, "O tipo da conta é obrigatório");
 
-        boolean usuarioJaPossuiConta = contaRepository.existePorUsuarioIdETipo(usuarioId, tipo);
+        boolean usuarioJaPossuiConta = contaRepository.existeNaoEncerradaPorUsuarioIdETipo(usuarioId, tipo);
 
         if (usuarioJaPossuiConta) {
             throw new UsuarioJaPossuiContaDoTipoException(tipo);

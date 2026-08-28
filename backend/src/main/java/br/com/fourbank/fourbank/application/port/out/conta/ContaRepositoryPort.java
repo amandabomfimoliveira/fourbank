@@ -15,9 +15,9 @@ public interface ContaRepositoryPort {
 
     List<Conta> listarPorUsuario(Long usuarioId);
 
-    Optional<Conta> buscarPorUsuarioIdETipo(Long usuarioId, TipoConta tipo);
+    Optional<Conta> buscarNaoEncerradaPorUsuarioIdETipo(Long usuarioId, TipoConta tipo);
 
-    boolean existePorUsuarioIdETipo(Long usuarioId, TipoConta tipo);
+    boolean existeNaoEncerradaPorUsuarioIdETipo(Long usuarioId, TipoConta tipo);
 
     boolean existePorAgenciaENumero(String agencia, String numero);
 }

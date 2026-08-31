@@ -1,11 +1,11 @@
 package br.com.fourbank.fourbank.adapter.out.security;
 
-import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaRepositoryPort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BCryptPasswordAdapter implements CodificadorSenhaPort {
+public class BCryptPasswordAdapter implements CodificadorSenhaRepositoryPort {
 
     private final PasswordEncoder passwordEncoder;
 

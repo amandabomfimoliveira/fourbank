@@ -2,9 +2,7 @@ package br.com.fourbank.fourbank.application.port.out.autenticacao;
 
 import br.com.fourbank.fourbank.application.model.usuario.Usuario;
 
-public interface TokenProviderPort {
+public interface AutenticadorRepositoryPort {
 
-    String gerarToken(Usuario usuario);
-
-    long getExpirationSeconds();
+    Usuario autenticar(String email, String senhaPura);
 }

@@ -53,6 +53,15 @@ public class ContaPersistenceImpl implements ContaRepositoryPort {
     }
 
     @Override
+    public Optional<Conta> buscarPorAgenciaENumero(
+        String agencia,
+        String numero
+    ) {
+        return repository.findByAgenciaAndNumero(agencia, numero)
+            .map(ContaPersistenceMapper::toModel);
+    }
+
+    @Override
     public boolean existeNaoEncerradaPorUsuarioIdETipo(Long usuarioId, TipoConta tipo) {
         return repository.existsByUsuarioIdAndTipoAndStatusNot(usuarioId, tipo, StatusConta.ENCERRADA);
     }

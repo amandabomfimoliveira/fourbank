@@ -5,7 +5,7 @@ import br.com.fourbank.fourbank.application.model.conta.Conta;
 import br.com.fourbank.fourbank.application.model.conta.ContaConstants;
 import br.com.fourbank.fourbank.application.model.usuario.Usuario;
 import br.com.fourbank.fourbank.application.port.in.autenticacao.CadastrarUsuarioUseCase;
-import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaRepositoryPort;
 import br.com.fourbank.fourbank.application.port.out.conta.ContaRepositoryPort;
 import br.com.fourbank.fourbank.application.port.out.usuario.UsuarioRepositoryPort;
 import br.com.fourbank.fourbank.application.result.autenticacao.AutenticacaoResult;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class CadastrarUsuarioUseCaseImpl implements CadastrarUsuarioUseCase {
 
     private final UsuarioRepositoryPort usuarioRepository;
-    private final CodificadorSenhaPort codificadorSenha;
+    private final CodificadorSenhaRepositoryPort codificadorSenha;
     private final NormalizarEmailService normalizarEmailService;
     private final EmailDisponivelValidator emailDisponivelValidator;
     private final DocumentoDisponivelValidator documentoDisponivelValidator;
@@ -33,7 +33,7 @@ public class CadastrarUsuarioUseCaseImpl implements CadastrarUsuarioUseCase {
 
     public CadastrarUsuarioUseCaseImpl(
             UsuarioRepositoryPort usuarioRepository,
-            CodificadorSenhaPort codificadorSenha,
+            CodificadorSenhaRepositoryPort codificadorSenha,
             NormalizarEmailService normalizarEmailService,
             EmailDisponivelValidator emailDisponivelValidator,
             DocumentoDisponivelValidator documentoDisponivelValidator,

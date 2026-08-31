@@ -19,6 +19,11 @@ public interface ContaJpaRepository extends JpaRepository<ContaData, Long> {
             StatusConta status
     );
 
+    Optional<ContaData> findByAgenciaAndNumero(
+        String agencia,
+        String numero
+    );
+
     boolean existsByUsuarioIdAndTipoAndStatusNot(Long usuarioId, TipoConta tipo, StatusConta status);
 
     boolean existsByAgenciaAndNumero(String agencia, String numero);

@@ -3,23 +3,32 @@ package br.com.fourbank.fourbank.infrastructure.config;
 import br.com.fourbank.fourbank.application.port.in.autenticacao.CadastrarUsuarioUseCase;
 import br.com.fourbank.fourbank.application.port.in.autenticacao.LoginUseCase;
 import br.com.fourbank.fourbank.application.port.in.conta.*;
+import br.com.fourbank.fourbank.application.port.in.transferencia.AgendarTransferenciaUseCase;
+import br.com.fourbank.fourbank.application.port.in.transferencia.ProcessarTransferenciasAgendadasUseCase;
+import br.com.fourbank.fourbank.application.port.in.transferencia.RealizarTransferenciaUseCase;
 import br.com.fourbank.fourbank.application.port.in.usuario.ConsultarUsuarioUseCase;
-import br.com.fourbank.fourbank.application.port.out.autenticacao.AutenticadorPort;
-import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaPort;
-import br.com.fourbank.fourbank.application.port.out.autenticacao.TokenProviderPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.AutenticadorRepositoryPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaRepositoryPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.TokenProviderRepositoryPort;
 import br.com.fourbank.fourbank.application.port.out.conta.ContaRepositoryPort;
+import br.com.fourbank.fourbank.application.port.out.transferencia.TransferenciaRepositoryPort;
 import br.com.fourbank.fourbank.application.port.out.usuario.UsuarioRepositoryPort;
-import br.com.fourbank.fourbank.application.service.conta.BuscarContaDoUsuarioService;
 import br.com.fourbank.fourbank.application.service.autenticacao.GerarResultadoAutenticacaoService;
 import br.com.fourbank.fourbank.application.service.autenticacao.NormalizarEmailService;
+import br.com.fourbank.fourbank.application.service.conta.BuscarContaDoUsuarioService;
 import br.com.fourbank.fourbank.application.service.conta.GerarNumeroContaService;
+import br.com.fourbank.fourbank.application.service.transferencia.CalcularTaxaTransferenciaService;
 import br.com.fourbank.fourbank.application.usecase.autenticacao.CadastrarUsuarioUseCaseImpl;
 import br.com.fourbank.fourbank.application.usecase.autenticacao.LoginUseCaseImpl;
 import br.com.fourbank.fourbank.application.usecase.conta.*;
+import br.com.fourbank.fourbank.application.usecase.transferencia.AgendarTransferenciaUseCaseImpl;
+import br.com.fourbank.fourbank.application.usecase.transferencia.ProcessarTransferenciasAgendadasUseCaseImpl;
+import br.com.fourbank.fourbank.application.usecase.transferencia.RealizarTransferenciaUseCaseImpl;
 import br.com.fourbank.fourbank.application.usecase.usuario.ConsultarUsuarioUseCaseImpl;
-import br.com.fourbank.fourbank.application.validator.autenticacao.EmailDisponivelValidator;
 import br.com.fourbank.fourbank.application.validator.autenticacao.DocumentoDisponivelValidator;
+import br.com.fourbank.fourbank.application.validator.autenticacao.EmailDisponivelValidator;
 import br.com.fourbank.fourbank.application.validator.conta.TipoContaDisponivelValidator;
+import br.com.fourbank.fourbank.application.validator.transferencia.DadosDestinatarioValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,7 +42,7 @@ public class ApplicationConfig {
 
     @Bean
     GerarResultadoAutenticacaoService gerarResultadoAutenticacaoService(
-            TokenProviderPort tokenProvider
+            TokenProviderRepositoryPort tokenProvider
     ) {
         return new GerarResultadoAutenticacaoService(tokenProvider);
     }
@@ -76,7 +85,7 @@ public class ApplicationConfig {
     @Bean
     CadastrarUsuarioUseCase cadastrarUsuarioUseCase(
             UsuarioRepositoryPort usuarioRepository,
-            CodificadorSenhaPort codificadorSenha,
+            CodificadorSenhaRepositoryPort codificadorSenha,
             NormalizarEmailService normalizarEmailService,
             EmailDisponivelValidator emailDisponivelValidator,
             DocumentoDisponivelValidator documentoDisponivelValidator,
@@ -113,7 +122,7 @@ public class ApplicationConfig {
 
     @Bean
     LoginUseCase loginUseCase(
-            AutenticadorPort autenticador,
+            AutenticadorRepositoryPort autenticador,
             NormalizarEmailService normalizarEmailService,
             GerarResultadoAutenticacaoService gerarResultadoAutenticacaoService
     ) {
@@ -152,6 +161,38 @@ public class ApplicationConfig {
     @Bean
     EncerrarContaUseCase encerrarContaUseCase(ContaRepositoryPort contaRepositoryPort, BuscarContaDoUsuarioService buscarContaDoUsuarioService) {
         return new EncerrarContaUseCaseImpl(contaRepositoryPort, buscarContaDoUsuarioService);
+    }
+
+    @Bean
+    RealizarTransferenciaUseCase realizarTransferenciaUseCase(TransferenciaRepositoryPort transferenciaRepositoryPort, UsuarioRepositoryPort usuarioRepositoryPort, ContaRepositoryPort contaRepositoryPort, CalcularTaxaTransferenciaService calcularTaxaTransferenciaService, DadosDestinatarioValidator dadosDestinatarioValidator){
+        return new RealizarTransferenciaUseCaseImpl(transferenciaRepositoryPort,usuarioRepositoryPort,contaRepositoryPort,calcularTaxaTransferenciaService,dadosDestinatarioValidator);
+    }
+
+    @Bean
+    CalcularTaxaTransferenciaService calcularTaxaTransferenciaService() {
+        return new CalcularTaxaTransferenciaService();
+    }
+
+    @Bean
+    DadosDestinatarioValidator dadosDestinatarioValidator() {
+        return new DadosDestinatarioValidator();
+    }
+
+    @Bean
+    AgendarTransferenciaUseCase agendarTransferenciaUseCase(TransferenciaRepositoryPort transferenciaRepositoryPort, UsuarioRepositoryPort usuarioRepositoryPort, ContaRepositoryPort contaRepositoryPort, CalcularTaxaTransferenciaService calcularTaxaTransferenciaService, DadosDestinatarioValidator dadosDestinatarioValidator){
+        return new AgendarTransferenciaUseCaseImpl(transferenciaRepositoryPort,usuarioRepositoryPort,contaRepositoryPort,calcularTaxaTransferenciaService,dadosDestinatarioValidator);
+    }
+
+    @Bean
+    ProcessarTransferenciasAgendadasUseCase
+    processarTransferenciasAgendadasUseCase(
+        TransferenciaRepositoryPort transferenciaRepository,
+        ContaRepositoryPort contaRepository
+    ) {
+        return new ProcessarTransferenciasAgendadasUseCaseImpl(
+            transferenciaRepository,
+            contaRepository
+        );
     }
 
 

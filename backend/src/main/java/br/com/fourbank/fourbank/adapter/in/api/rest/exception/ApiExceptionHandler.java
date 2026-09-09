@@ -19,31 +19,32 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiError> handleValidation(
-            MethodArgumentNotValidException exception,
-            HttpServletRequest request
+        MethodArgumentNotValidException exception,
+        HttpServletRequest request
     ) {
         Map<String, String> campos = new LinkedHashMap<>();
         exception.getBindingResult().getFieldErrors().forEach(error ->
-                campos.putIfAbsent(error.getField(), error.getDefaultMessage()));
+            campos.putIfAbsent(error.getField(), error.getDefaultMessage()));
         return resposta(HttpStatus.BAD_REQUEST, "Os dados enviados são inválidos", request, campos);
     }
 
     @ExceptionHandler({
-            EmailJaCadastradoException.class,
-            DocumentoJaCadastradoException.class,
-            DataIntegrityViolationException.class
+        EmailJaCadastradoException.class,
+        DocumentoJaCadastradoException.class,
+        DataIntegrityViolationException.class
     })
     ResponseEntity<ApiError> handleConflict(Exception exception, HttpServletRequest request) {
         String mensagem = exception instanceof EmailJaCadastradoException
-                || exception instanceof DocumentoJaCadastradoException
-                ? exception.getMessage()
-                : "Já existe um registro com esses dados";
+            || exception instanceof DocumentoJaCadastradoException
+            ? exception.getMessage()
+            : "Já existe um registro com esses dados";
         return resposta(HttpStatus.CONFLICT, mensagem, request, Map.of());
     }
 
     @ExceptionHandler({
         UsuarioNaoEncontradoException.class,
-        ContaNaoEncontradaException.class
+        ContaNaoEncontradaException.class,
+        TransferenciaNaoEncontradaException.class
     })
     ResponseEntity<ApiError> handleNotFound(
         RuntimeException exception,
@@ -59,8 +60,8 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     ResponseEntity<ApiError> handleAuthentication(
-            AuthenticationException exception,
-            HttpServletRequest request
+        AuthenticationException exception,
+        HttpServletRequest request
     ) {
         return resposta(HttpStatus.UNAUTHORIZED, "E-mail ou senha inválidos", request, Map.of());
     }
@@ -70,6 +71,7 @@ public class ApiExceptionHandler {
         ContaEncerradaException.class,
         ContaNaoBloqueadaException.class,
         SaldoNaoZeradoException.class,
+        SaldoInsuficienteException.class,
         UsuarioJaPossuiContaDoTipoException.class
     })
     ResponseEntity<ApiError> handleContaConflict(
@@ -84,19 +86,32 @@ public class ApiExceptionHandler {
         );
     }
 
+    @ExceptionHandler
+    ResponseEntity<ApiError> handleDadosDestinatarioInvalidos(
+        DadosDestinatarioInvalidosException exception,
+        HttpServletRequest request
+    ) {
+        return resposta(
+            HttpStatus.BAD_REQUEST,
+            exception.getMessage(),
+            request,
+            Map.of()
+        );
+    }
+
     private ResponseEntity<ApiError> resposta(
-            HttpStatus status,
-            String mensagem,
-            HttpServletRequest request,
-            Map<String, String> campos
+        HttpStatus status,
+        String mensagem,
+        HttpServletRequest request,
+        Map<String, String> campos
     ) {
         var body = new ApiError(
-                Instant.now(),
-                status.value(),
-                status.getReasonPhrase(),
-                mensagem,
-                request.getRequestURI(),
-                campos
+            Instant.now(),
+            status.value(),
+            status.getReasonPhrase(),
+            mensagem,
+            request.getRequestURI(),
+            campos
         );
         return ResponseEntity.status(status).body(body);
     }

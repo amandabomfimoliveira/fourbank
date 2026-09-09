@@ -1,6 +1,6 @@
 package br.com.fourbank.fourbank.adapter.out.security;
 
-import br.com.fourbank.fourbank.application.port.out.autenticacao.TokenProviderPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.TokenProviderRepositoryPort;
 import br.com.fourbank.fourbank.application.model.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -14,14 +14,14 @@ import java.time.Instant;
 import java.util.List;
 
 @Component
-public class JwtTokenAdapter implements TokenProviderPort {
+public class JwtTokenAdapterRepository implements TokenProviderRepositoryPort {
 
     private static final String ISSUER = "fourbank";
 
     private final JwtEncoder jwtEncoder;
     private final long expirationSeconds;
 
-    public JwtTokenAdapter(
+    public JwtTokenAdapterRepository(
             JwtEncoder jwtEncoder,
             @Value("${app.jwt.expiration-seconds}") long expirationSeconds
     ) {

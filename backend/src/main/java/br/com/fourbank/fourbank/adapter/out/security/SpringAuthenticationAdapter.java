@@ -1,13 +1,13 @@
 package br.com.fourbank.fourbank.adapter.out.security;
 
-import br.com.fourbank.fourbank.application.port.out.autenticacao.AutenticadorPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.AutenticadorRepositoryPort;
 import br.com.fourbank.fourbank.application.model.usuario.Usuario;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SpringAuthenticationAdapter implements AutenticadorPort {
+public class SpringAuthenticationAdapter implements AutenticadorRepositoryPort {
 
     private final AuthenticationManager authenticationManager;
 

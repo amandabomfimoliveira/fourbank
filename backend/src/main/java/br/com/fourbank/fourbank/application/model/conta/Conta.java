@@ -3,7 +3,9 @@ package br.com.fourbank.fourbank.application.model.conta;
 import br.com.fourbank.fourbank.application.exception.ContaBloqueadaException;
 import br.com.fourbank.fourbank.application.exception.ContaEncerradaException;
 import br.com.fourbank.fourbank.application.exception.ContaNaoBloqueadaException;
+import br.com.fourbank.fourbank.application.exception.SaldoInsuficienteException;
 import br.com.fourbank.fourbank.application.exception.SaldoNaoZeradoException;
+
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -14,7 +16,7 @@ public final class Conta {
     private final String numero;
     private final String agencia;
     private final TipoConta tipo;
-    private final BigDecimal saldo;
+    private BigDecimal saldo;
     private StatusConta status;
 
 
@@ -105,6 +107,43 @@ public final class Conta {
             throw new SaldoNaoZeradoException();
         }
         status = StatusConta.ENCERRADA;
+    }
+
+    public void debitar(BigDecimal valor) {
+        validarValorDaMovimentacao(valor);
+
+        if (status == StatusConta.ENCERRADA) {
+            throw new ContaEncerradaException();
+        }
+        if (status == StatusConta.BLOQUEADA) {
+            throw new ContaBloqueadaException();
+        }
+        if (saldo.compareTo(valor) < 0) {
+            throw new SaldoInsuficienteException();
+        }
+
+        saldo = saldo.subtract(valor);
+    }
+
+    public void creditar(BigDecimal valor) {
+        validarValorDaMovimentacao(valor);
+
+        if (status == StatusConta.ENCERRADA) {
+            throw new ContaEncerradaException();
+        }
+        if (status == StatusConta.BLOQUEADA) {
+            throw new ContaBloqueadaException();
+        }
+        saldo = saldo.add(valor);
+    }
+
+    private static void validarValorDaMovimentacao(BigDecimal valor) {
+        Objects.requireNonNull(valor, "O valor da movimentação é obrigatório");
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException(
+                    "O valor da movimentação deve ser maior que zero"
+            );
+        }
     }
 
     public Long getId() {

@@ -28,3 +28,7 @@ app:
   jwt:
     secret: ${JWT_SECRET}
     expiration-seconds: ${JWT_EXPIRATION_SECONDS:3600}
+
+fourbank:
+  transferencias-agendadas:
+    intervalo-ms: 5000

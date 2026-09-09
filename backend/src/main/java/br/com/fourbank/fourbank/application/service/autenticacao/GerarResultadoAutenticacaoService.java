@@ -1,14 +1,14 @@
 package br.com.fourbank.fourbank.application.service.autenticacao;
 
 import br.com.fourbank.fourbank.application.model.usuario.Usuario;
-import br.com.fourbank.fourbank.application.port.out.autenticacao.TokenProviderPort;
+import br.com.fourbank.fourbank.application.port.out.autenticacao.TokenProviderRepositoryPort;
 import br.com.fourbank.fourbank.application.result.autenticacao.AutenticacaoResult;
 
 public class GerarResultadoAutenticacaoService {
 
-    private final TokenProviderPort tokenProvider;
+    private final TokenProviderRepositoryPort tokenProvider;
 
-    public GerarResultadoAutenticacaoService(TokenProviderPort tokenProvider) {
+    public GerarResultadoAutenticacaoService(TokenProviderRepositoryPort tokenProvider) {
         this.tokenProvider = tokenProvider;
     }
 

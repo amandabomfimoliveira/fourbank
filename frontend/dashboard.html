@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>4Bank</title>
 <link rel="stylesheet" href="css/dashboard.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
@@ -32,6 +33,12 @@ window
 </span>
   Pix
 
+    </button>
+    <button onclick="loadPage('transfer')">
+      <span class="material-symbols-outlined menu-icon">
+        sync_alt
+      </span>
+      Transferências
     </button>
     <button onclick="loadPage('invest')">
       <span class="material-symbols-outlined menu-icon">
@@ -100,5 +107,6 @@ receipt
 
 <script src="js/dashboard.js"></script>
 <script src="js/dashboard-api.js"></script>
+<script src="js/transferencia.js"></script>
 </body>
 </html>

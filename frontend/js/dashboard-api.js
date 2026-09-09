@@ -6,6 +6,7 @@ const fourbankSession = {
   contas: []
 };
 let encerramentoPendente = null;
+let mostrarContasEncerradas = false;
 
 function escaparHtml(valor) {
   return String(valor ?? "").replace(/[&<>'"]/g, caractere => ({
@@ -86,8 +87,14 @@ function renderizarContasConectadas() {
   document.querySelector(".backend-accounts")?.remove();
 
   const tiposDisponiveis = tiposContaDisponiveis();
+  const quantidadeEncerradas = fourbankSession.contas
+    .filter(conta => conta.status === "ENCERRADA")
+    .length;
+  const contasVisiveis = mostrarContasEncerradas
+    ? fourbankSession.contas
+    : fourbankSession.contas.filter(conta => conta.status !== "ENCERRADA");
 
-  const contas = fourbankSession.contas.map(conta => `
+  const contas = contasVisiveis.map(conta => `
     <article class="backend-account-card">
       <div>
         <small>${nomeTipoConta(conta.tipo)}</small>
@@ -104,17 +111,30 @@ function renderizarContasConectadas() {
       <div class="backend-accounts-title">
         <div><h3>Minhas contas</h3></div>
         <div class="backend-accounts-actions">
-          <span>${fourbankSession.contas.length} ${fourbankSession.contas.length === 1 ? "conta" : "contas"}</span>
+          <span>${contasVisiveis.length} ${contasVisiveis.length === 1 ? "conta visível" : "contas visíveis"}</span>
+          ${quantidadeEncerradas ? `
+            <button class="backend-closed-accounts-toggle" id="toggle-closed-accounts" type="button"
+              aria-pressed="${mostrarContasEncerradas}">
+              <span class="material-symbols-outlined" aria-hidden="true">
+                ${mostrarContasEncerradas ? "visibility_off" : "visibility"}
+              </span>
+              ${mostrarContasEncerradas ? "Ocultar encerradas" : `Mostrar encerradas (${quantidadeEncerradas})`}
+            </button>
+          ` : ""}
           ${tiposDisponiveis.length
             ? '<button class="btn" id="open-account-modal" type="button">+ Nova conta</button>'
-            : '<span class="backend-all-accounts">Todos os tipos contratados</span>'}
+            : '<span class="backend-all-accounts"></span>'}
         </div>
       </div>
-      <div class="backend-accounts-grid">${contas || "<p>Nenhuma conta encontrada.</p>"}</div>
+      <div class="backend-accounts-grid">${contas || "<p>Nenhuma conta ativa ou bloqueada para exibir.</p>"}</div>
     </section>
   `);
 
   document.getElementById("open-account-modal")?.addEventListener("click", abrirModalNovaConta);
+  document.getElementById("toggle-closed-accounts")?.addEventListener("click", () => {
+    mostrarContasEncerradas = !mostrarContasEncerradas;
+    renderizarContasConectadas();
+  });
   document.querySelector(".backend-accounts")?.addEventListener("click", evento => {
     const botao = evento.target.closest("[data-account-action]");
     if (botao) executarAcaoConta(botao.dataset.accountAction, botao.dataset.accountType, botao);
@@ -275,7 +295,7 @@ const carregarPaginaOriginal = loadPage;
 loadPage = function (pagina) {
   carregarPaginaOriginal(pagina);
   document.querySelectorAll(".sidebar button").forEach(botao => botao.classList.remove("menu-active"));
-  const paginasMenu = ["dashboard", "pix", "invest", "cartao", "extrato"];
+  const paginasMenu = ["dashboard", "pix", "transfer", "invest", "cartao", "extrato"];
   const indice = paginasMenu.indexOf(pagina);
   if (indice >= 0) document.querySelectorAll(".sidebar button")[indice]?.classList.add("menu-active");
   if (pagina === "dashboard" && fourbankSession.usuario) renderizarContasConectadas();

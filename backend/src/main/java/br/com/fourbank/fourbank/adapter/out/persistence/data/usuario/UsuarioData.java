@@ -10,9 +10,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
 
 import java.time.Instant;
 
+@Getter
 @Entity
 @Table(name = "usuarios")
 public class UsuarioData {
@@ -67,35 +69,4 @@ public class UsuarioData {
         this.criadoEm = criadoEm;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getDocumento() {
-        return documento;
-    }
-
-    public TipoPessoa getTipoPessoa() {
-        return tipoPessoa;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public Instant getCriadoEm() {
-        return criadoEm;
-    }
 }

@@ -43,7 +43,8 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler({
         UsuarioNaoEncontradoException.class,
-        ContaNaoEncontradaException.class
+        ContaNaoEncontradaException.class,
+        TransferenciaNaoEncontradaException.class
     })
     ResponseEntity<ApiError> handleNotFound(
         RuntimeException exception,

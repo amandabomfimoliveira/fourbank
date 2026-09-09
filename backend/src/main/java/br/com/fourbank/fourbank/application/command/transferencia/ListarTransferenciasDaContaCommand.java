@@ -6,4 +6,5 @@ public record ListarTransferenciasDaContaCommand(
     String emailUsuario,
     TipoConta tipoConta
 ) {
+
 }

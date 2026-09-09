@@ -3,9 +3,7 @@ package br.com.fourbank.fourbank.infrastructure.config;
 import br.com.fourbank.fourbank.application.port.in.autenticacao.CadastrarUsuarioUseCase;
 import br.com.fourbank.fourbank.application.port.in.autenticacao.LoginUseCase;
 import br.com.fourbank.fourbank.application.port.in.conta.*;
-import br.com.fourbank.fourbank.application.port.in.transferencia.AgendarTransferenciaUseCase;
-import br.com.fourbank.fourbank.application.port.in.transferencia.ProcessarTransferenciasAgendadasUseCase;
-import br.com.fourbank.fourbank.application.port.in.transferencia.RealizarTransferenciaUseCase;
+import br.com.fourbank.fourbank.application.port.in.transferencia.*;
 import br.com.fourbank.fourbank.application.port.in.usuario.ConsultarUsuarioUseCase;
 import br.com.fourbank.fourbank.application.port.out.autenticacao.AutenticadorRepositoryPort;
 import br.com.fourbank.fourbank.application.port.out.autenticacao.CodificadorSenhaRepositoryPort;
@@ -21,9 +19,7 @@ import br.com.fourbank.fourbank.application.service.transferencia.CalcularTaxaTr
 import br.com.fourbank.fourbank.application.usecase.autenticacao.CadastrarUsuarioUseCaseImpl;
 import br.com.fourbank.fourbank.application.usecase.autenticacao.LoginUseCaseImpl;
 import br.com.fourbank.fourbank.application.usecase.conta.*;
-import br.com.fourbank.fourbank.application.usecase.transferencia.AgendarTransferenciaUseCaseImpl;
-import br.com.fourbank.fourbank.application.usecase.transferencia.ProcessarTransferenciasAgendadasUseCaseImpl;
-import br.com.fourbank.fourbank.application.usecase.transferencia.RealizarTransferenciaUseCaseImpl;
+import br.com.fourbank.fourbank.application.usecase.transferencia.*;
 import br.com.fourbank.fourbank.application.usecase.usuario.ConsultarUsuarioUseCaseImpl;
 import br.com.fourbank.fourbank.application.validator.autenticacao.DocumentoDisponivelValidator;
 import br.com.fourbank.fourbank.application.validator.autenticacao.EmailDisponivelValidator;
@@ -192,6 +188,30 @@ public class ApplicationConfig {
         return new ProcessarTransferenciasAgendadasUseCaseImpl(
             transferenciaRepository,
             contaRepository
+        );
+    }
+
+    @Bean
+    ConsultarTransferenciaUseCase consultarTransferenciaUseCase(
+        ContaRepositoryPort contaRepository,
+        UsuarioRepositoryPort usuarioRepository,
+        TransferenciaRepositoryPort transferenciaRepository
+    ) {
+        return new ConsultarTransferenciaUseCaseImpl(
+            contaRepository,
+            usuarioRepository,
+            transferenciaRepository
+        );
+    }
+
+    @Bean
+    ListarTransferenciasDaContaUseCase listarTransferenciasDaContaUseCase(
+        ContaRepositoryPort contaRepositoryPort,
+        UsuarioRepositoryPort usuarioRepositoryPort,TransferenciaRepositoryPort transferenciaRepositoryPort){
+        return new ListarTransferenciasDaContaUseCaseImpl(
+            contaRepositoryPort,
+            usuarioRepositoryPort,
+            transferenciaRepositoryPort
         );
     }
 

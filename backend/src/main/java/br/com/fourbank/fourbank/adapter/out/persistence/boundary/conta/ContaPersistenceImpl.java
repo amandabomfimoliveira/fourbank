@@ -39,26 +39,17 @@ public class ContaPersistenceImpl implements ContaRepositoryPort {
 
     @Override
     public List<Conta> listarPorUsuario(Long usuarioId) {
-        return repository.findByUsuarioId(usuarioId)
-                .stream()
-                .map(ContaPersistenceMapper::toModel)
-                .toList();
+        return repository.findByUsuarioId(usuarioId).stream().map(ContaPersistenceMapper::toModel).toList();
     }
 
     @Override
     public Optional<Conta> buscarNaoEncerradaPorUsuarioIdETipo(Long usuarioId, TipoConta tipo) {
-        return repository
-                .findFirstByUsuarioIdAndTipoAndStatusNot(usuarioId, tipo, StatusConta.ENCERRADA)
-                .map(ContaPersistenceMapper::toModel);
+        return repository.findFirstByUsuarioIdAndTipoAndStatusNot(usuarioId, tipo, StatusConta.ENCERRADA).map(ContaPersistenceMapper::toModel);
     }
 
     @Override
-    public Optional<Conta> buscarPorAgenciaENumero(
-        String agencia,
-        String numero
-    ) {
-        return repository.findByAgenciaAndNumero(agencia, numero)
-            .map(ContaPersistenceMapper::toModel);
+    public Optional<Conta> buscarPorAgenciaENumero(String agencia, String numero) {
+        return repository.findByAgenciaAndNumero(agencia, numero).map(ContaPersistenceMapper::toModel);
     }
 
     @Override
@@ -68,6 +59,6 @@ public class ContaPersistenceImpl implements ContaRepositoryPort {
 
     @Override
     public boolean existePorAgenciaENumero(String agencia, String numero) {
-        return repository.existsByAgenciaAndNumero(agencia,numero);
+        return repository.existsByAgenciaAndNumero(agencia, numero);
     }
 }

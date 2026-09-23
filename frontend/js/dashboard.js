@@ -144,7 +144,7 @@ window
       <button onclick="loadPage('extrato')">Ver mais</button>
     </div>
 
-    ${extrato.slice().reverse().slice(0,5).map(item=>`
+    ${extrato.slice().filter(item => item.movimentacaoEfetivada !== false).reverse().slice(0,5).map(item=>`
       <div class="row">
         <span>${item.tipo}</span>
         <strong style="color:${item.valor<0?'red':'green'}">
@@ -283,6 +283,10 @@ window
 
 <button id="btnPix" class="filtro-btn" onclick="filtrarExtrato('pix', this)">
   Pix
+</button>
+
+<button id="btnTransferencia" class="filtro-btn" onclick="filtrarExtrato('transferencia', this)">
+  Transferências
 </button>
 
 <button id="btnCartao" class="filtro-btn" onclick="filtrarExtrato('cartao', this)">
@@ -667,6 +671,13 @@ function renderGraficoExtrato(){
         }
 
         if(
+            filtroAtual === "transferencia" &&
+            item.categoria === "transferencia"
+        ){
+            return true;
+        }
+
+        if(
             filtroAtual === "cartao" &&
             (
                 item.tipo.includes("crédito") ||
@@ -689,7 +700,9 @@ function renderGraficoExtrato(){
         return false;
     });
 
-    movimentos.forEach(item => {
+    movimentos
+    .filter(item => item.movimentacaoEfetivada !== false)
+    .forEach(item => {
 
         if(item.valor >= 0){
             entradas += Number(item.valor);
@@ -1214,6 +1227,7 @@ function atualizarFiltroAtivo(){
     const mapa = {
         todos: "btnTodos",
         pix: "btnPix",
+        transferencia: "btnTransferencia",
         cartao: "btnCartao",
         invest: "btnInvest"
     };
@@ -1295,6 +1309,13 @@ function renderExtrato(){
         }
 
         if(
+            filtroAtual === "transferencia" &&
+            item.categoria === "transferencia"
+        ){
+            return true;
+        }
+
+        if(
             filtroAtual === "cartao" &&
             (
                 item.tipo.includes("crédito") ||
@@ -1330,9 +1351,12 @@ function renderExtrato(){
     let cor = item.valor < 0 ? "#ef4444" : "#22c55e";
 
     html += `
-      <div class="card">
+      <div class="card${item.categoria === "transferencia" ? " statement-transfer-card" : ""}">
         <div class="row">
-          <strong>${item.tipo}</strong>
+          <div class="statement-title">
+            <strong>${item.tipo}</strong>
+            ${item.status ? `<span class="statement-status ${item.status.toLowerCase()}">${item.statusLabel || item.status}</span>` : ""}
+          </div>
           <span style="color:${cor}">
             ${formatarMoeda(item.valor)}
           </span>
@@ -1340,7 +1364,7 @@ function renderExtrato(){
 
         <div class="row">
           <small>${item.descricao || "-"}</small>
-          <small>${item.data}</small>
+          <small>${item.dataFormatada || item.data}</small>
         </div>
       </div>
     `;

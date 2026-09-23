@@ -137,7 +137,7 @@ function renderizarPaginaTransferencia() {
                                 <span>3</span>
                                 <div>
                                     <h2>Valor e data</h2>
-                                    <p>A taxa, quando aplicável, será calculada pelo backend.</p>
+                                    <p>Informe o valor e, se agendada, a data e horário da transferência.</p>
                                 </div>
                             </div>
 
@@ -376,6 +376,9 @@ function mostrarComprovanteTransferencia(transferencia, modo) {
         <strong>${formatarMoeda(Number(transferencia.valor))}</strong>
         <dl>
             <div><dt>Código</dt><dd>#${escaparHtml(transferencia.id)}</dd></div>
+            ${transferencia.nomeDestinatario
+                ? `<div><dt>Destinatário</dt><dd>${escaparHtml(transferencia.nomeDestinatario)}</dd></div>`
+                : ""}
             <div><dt>Data</dt><dd>${formatarDataTransferencia(dataPrincipal)}</dd></div>
             <div><dt>Taxa</dt><dd>${formatarMoeda(Number(transferencia.taxa || 0))}</dd></div>
             <div><dt>Status</dt><dd>${escaparHtml(rotulosStatusTransferencia[transferencia.status] || transferencia.status)}</dd></div>
@@ -433,7 +436,9 @@ function renderizarHistoricoTransferencias(transferencias, conta) {
                     </span>
                 </div>
                 <div class="transfer-history-info">
-                    <strong>${enviada ? "Transferência enviada" : "Transferência recebida"}</strong>
+                    <strong>${enviada
+                        ? `Transferência para ${escaparHtml(transferencia.nomeDestinatario || "outro cliente")}`
+                        : `Transferência de ${escaparHtml(transferencia.nomeRemetente || "outro cliente")}`}</strong>
                     <small>${formatarDataTransferencia(data)} · #${escaparHtml(transferencia.id)}</small>
                     <span class="transfer-status ${String(transferencia.status).toLowerCase()}">${escaparHtml(status)}</span>
                 </div>

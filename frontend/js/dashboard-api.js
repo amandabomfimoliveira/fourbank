@@ -51,6 +51,108 @@ function nomeTipoConta(tipo) {
   return tipo === "POUPANCA" ? "Conta poupança" : "Conta corrente";
 }
 
+const statusTransferenciaExtrato = {
+  AGENDADA: "Agendada",
+  PROCESSANDO: "Processando",
+  CONCLUIDA: "Concluída",
+  FALHA: "Falhou",
+  CANCELADA: "Cancelada"
+};
+
+function formatarDataExtrato(data) {
+  if (!data) return "Data não informada";
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short"
+  }).format(new Date(data));
+}
+
+function transferenciaParaItemExtrato(transferencia, conta) {
+  const enviada = Number(transferencia.contaOrigemId) === Number(conta.id);
+  const taxa = enviada ? Number(transferencia.taxa || 0) : 0;
+  const valorTransferencia = Number(transferencia.valor);
+  const movimentacaoEfetivada = transferencia.status === "CONCLUIDA";
+  const data = transferencia.realizadaEm
+    || transferencia.agendadaPara
+    || transferencia.solicitadaEm;
+  const detalhesTaxa = taxa > 0
+    ? ` · Valor ${formatarMoeda(valorTransferencia)} + taxa ${formatarMoeda(taxa)}`
+    : "";
+  const participante = enviada
+    ? transferencia.nomeDestinatario
+    : transferencia.nomeRemetente;
+  const identificacaoParticipante = participante
+    ? `${enviada ? "Destinatário" : "Remetente"}: ${escaparHtml(participante)} · `
+    : "";
+
+  return {
+    idBackend: `${transferencia.id}-${conta.id}`,
+    categoria: "transferencia",
+    tipo: enviada ? "Transferência enviada" : "Transferência recebida",
+    descricao: `${identificacaoParticipante}${nomeTipoConta(conta.tipo)} · Ag. ${escaparHtml(conta.agencia)} · Conta ${escaparHtml(conta.numero)}${detalhesTaxa}`,
+    valor: enviada ? -(valorTransferencia + taxa) : valorTransferencia,
+    data,
+    dataFormatada: formatarDataExtrato(data),
+    status: transferencia.status,
+    statusLabel: statusTransferenciaExtrato[transferencia.status] || transferencia.status,
+    movimentacaoEfetivada
+  };
+}
+
+async function carregarTransferenciasNoExtrato() {
+  const listaExtrato = document.getElementById("listaExtrato");
+  if (!listaExtrato) return;
+
+  const contasConsultaveis = fourbankSession.contas
+    .filter(conta => conta.status !== "ENCERRADA");
+
+  extrato = extrato.filter(item => item.categoria !== "transferencia");
+
+  if (!contasConsultaveis.length) {
+    renderExtrato();
+    renderGraficoExtrato();
+    return;
+  }
+
+  listaExtrato.insertAdjacentHTML("afterbegin", `
+    <div class="statement-loading" role="status">
+      <span class="material-symbols-outlined" aria-hidden="true">sync</span>
+      Carregando transferências do backend...
+    </div>
+  `);
+
+  const resultados = await Promise.allSettled(
+    contasConsultaveis.map(async conta => ({
+      conta,
+      transferencias: await fourbankApi(
+        `/transferencias/listar-transferencias/${encodeURIComponent(conta.tipo)}`
+      )
+    }))
+  );
+
+  if (!document.getElementById("listaExtrato")) return;
+
+  const itensTransferencia = resultados
+    .filter(resultado => resultado.status === "fulfilled")
+    .flatMap(resultado => resultado.value.transferencias.map(transferencia =>
+      transferenciaParaItemExtrato(transferencia, resultado.value.conta)
+    ));
+
+  extrato.push(...itensTransferencia);
+  renderExtrato();
+  renderGraficoExtrato();
+  atualizarFiltroAtivo();
+
+  const falhas = resultados.filter(resultado => resultado.status === "rejected");
+  if (falhas.length) {
+    document.getElementById("listaExtrato")?.insertAdjacentHTML("afterbegin", `
+      <p class="statement-warning" role="alert">
+        Algumas contas não puderam ter suas transferências carregadas.
+      </p>
+    `);
+  }
+}
+
 function tiposContaDisponiveis() {
   const tiposContratados = new Set(
     fourbankSession.contas
@@ -299,6 +401,7 @@ loadPage = function (pagina) {
   const indice = paginasMenu.indexOf(pagina);
   if (indice >= 0) document.querySelectorAll(".sidebar button")[indice]?.classList.add("menu-active");
   if (pagina === "dashboard" && fourbankSession.usuario) renderizarContasConectadas();
+  if (pagina === "extrato" && fourbankSession.usuario) carregarTransferenciasNoExtrato();
 };
 
 function sairDaConta() {
